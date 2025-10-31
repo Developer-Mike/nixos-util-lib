@@ -10,7 +10,9 @@
   hostname-owner,
   systemname,
   user-paths,
-  os-path
+  os-path,
+
+  ...
 } @ args:
 
 let
