@@ -1,6 +1,6 @@
 # mk-system function for creating NixOS system configurations
 {
-  hardware-configuration ? ../hardware-configuration.nix,
+  hardware-configuration,
   nixpkgs,
   nixpkgs-stable,
   home-manager,
