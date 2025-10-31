@@ -26,7 +26,7 @@ let
 
   # Shared arguments passed to all modules
   tmpSpecialArgs = args // {
-    inherit hostname;
+    inherit hostname pkgs-stable;
   };
 
   # Import OS configuration
@@ -55,9 +55,9 @@ nixpkgs.lib.nixosSystem
     }
 
     # Users
-    (import ./mk-users.nix)
+    (import ./mk-users.nix { inherit specialArgs; })
 
     # Home Manager
-    (import ./mk-home.nix)
+    (import ./mk-home.nix { inherit home-manager version user-paths specialArgs; })
   ] ++ os-configuration.system;
 }
