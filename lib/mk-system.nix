@@ -8,7 +8,7 @@
   system,
   version,
   hostname-owner,
-  systemname
+  systemname,
   user-paths,
   os-path
 } @ args:
