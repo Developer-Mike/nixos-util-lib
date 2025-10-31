@@ -1,6 +1,5 @@
 # mk-system function for creating NixOS system configurations
 {
-  inputs,
   hardware-configuration,
   nixpkgs,
   nixpkgs-stable,
@@ -35,14 +34,6 @@ let
 
   # Make final shared args with secrets
   specialArgs = tmpSpecialArgs // { system-secrets = os-configuration.secrets; };
-
-  # Helper functions
-  mk-users = import ./mk-users.nix {
-    inherit specialArgs;
-  };
-  mk-home = import ./mk-home.nix {
-    inherit home-manager specialArgs;
-  };
 in
 nixpkgs.lib.nixosSystem
 {
@@ -64,9 +55,9 @@ nixpkgs.lib.nixosSystem
     }
 
     # Users
-    (mk-users { inherit user-paths; })
+    (import ./mk-users.nix)
 
     # Home Manager
-    (mk-home { inherit version user-paths; })
+    (import ./mk-home.nix)
   ] ++ os-configuration.system;
 }

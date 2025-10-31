@@ -1,9 +1,5 @@
 # mk-home function for creating Home Manager configurations
-{ home-manager, specialArgs }:
-
-{ version, user-paths }:
-
-{ pkgs, ... }:
+{ home-manager, pkgs, version, user-paths, ... } @ args:
 
 {
   imports = [
@@ -15,14 +11,11 @@
 
         # Loop through users and create ${user.username}: ${user.home-manager-user} mapping
         users = builtins.listToAttrs (map (user-path:
-          let
-            user = import user-path (specialArgs // { inherit pkgs; });
-          in
-          {
+          let user = import user-path args;
+          in {
             name = user.username;
             value = user.home-manager-user // {
-              _module.args = specialArgs // {
-                inherit pkgs;
+              _module.args = args // {
                 user-secrets = user.secrets;
               };
 

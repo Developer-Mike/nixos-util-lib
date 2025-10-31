@@ -1,17 +1,11 @@
 # mk-users function for creating system users
-{ specialArgs }:
-
-{ user-paths }:
-
-{ pkgs, ... }:
+{ pkgs, user-paths, ... } @ args:
 
 {
   # Loop through users and create ${user.username}: ${user.system-user} mapping
   users.users = builtins.listToAttrs (map (user-path:
-    let
-      user = import user-path (specialArgs // { inherit pkgs; });
-    in
-    {
+    let user = import user-path args;
+    in {
       name = user.username;
       value = user.system-user;
     }
