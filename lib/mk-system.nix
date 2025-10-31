@@ -1,5 +1,6 @@
 # mk-system function for creating NixOS system configurations
 {
+  inputs,
   hardware-configuration,
   nixpkgs,
   nixpkgs-stable,
