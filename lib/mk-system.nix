@@ -2,7 +2,7 @@
 {
   hardware-configuration,
   nixpkgs,
-  nixpkgs-stable,
+  nixpkgs-alt,
   home-manager,
 
   system,
@@ -21,14 +21,14 @@ let
   else systemname;
 
   # Set pkgs
-  pkgs-stable = import nixpkgs-stable {
+  pkgs-alt = import nixpkgs-alt {
     inherit system;
     config.allowUnfree = true;
   };
 
   # Shared arguments passed to all modules
   tmpSpecialArgs = args // {
-    inherit hostname pkgs-stable;
+    inherit hostname pkgs-alt;
   };
 
   # Import OS configuration
