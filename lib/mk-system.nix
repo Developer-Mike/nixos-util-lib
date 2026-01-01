@@ -7,7 +7,7 @@
 
   system,
   version,
-  hostname-owner,
+  hostname-owner ? null,
   systemname,
   user-paths,
   os-path,
@@ -16,7 +16,9 @@
 } @ args:
 
 let
-  hostname = "${hostname-owner}-${systemname}";
+  hostname = if hostname-owner != null then
+    "${hostname-owner}-${systemname}"
+  else systemname;
 
   # Set pkgs
   pkgs-stable = import nixpkgs-stable {
