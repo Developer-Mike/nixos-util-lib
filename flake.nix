@@ -3,7 +3,7 @@
 
   inputs = { };
 
-  outputs = { ... } @ inputs: {
+  outputs = { ... }: {
     mk-system = import ./lib/mk-system.nix;
   };
 }

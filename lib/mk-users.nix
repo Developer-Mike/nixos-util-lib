@@ -1,15 +1,17 @@
 # mk-users function for creating system users
 { specialArgs }:
 
-{ pkgs, user-paths, ... }:
+{ lib, pkgs, user-paths, ... }:
 
+let
+  users = map (user-path:
+    import user-path (specialArgs // { inherit pkgs; })
+  ) user-paths;
+in
 {
-  # Loop through users and create ${user.username}: ${user.system-user} mapping
-  users.users = builtins.listToAttrs (map (user-path:
-    let user = import user-path (specialArgs // { inherit pkgs; });
-    in {
-      name = user.username;
-      value = user.system-user;
-    }
-  ) user-paths);
+  users.users = lib.mkMerge (map (user: {
+    ${user.username} = user.system-user;
+  }) users);
+
+  imports = lib.flatten (map (user: user.system-modules or [ ]) users);
 }
