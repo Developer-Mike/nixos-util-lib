@@ -13,5 +13,7 @@ in
     ${user.username} = user.system-user;
   }) users);
 
-  imports = lib.flatten (map (user: user.system-modules or [ ]) users);
+  imports = lib.flatten (map (user:
+    map (module: module + "/system.nix") user.shared-modules
+  ) users);
 }

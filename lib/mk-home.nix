@@ -1,7 +1,7 @@
 # mk-home function for creating Home Manager configurations
 { home-manager, version, user-paths, specialArgs }:
 
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   extraSpecialArgs = specialArgs // {
     inherit pkgs;
@@ -22,15 +22,20 @@ in
           let user = import user-path extraSpecialArgs;
           in {
             name = user.username;
-            value = user.home-manager-user // {
-              _module.args.user-secrets = user.secrets;
+            value = lib.mkMerge [
+              user.home-manager-user
+              {
+                _module.args.user-secrets = user.secrets;
 
-              home = {
-                username = user.username;
-                homeDirectory = "/home/${user.username}";
-                stateVersion = version;
-              };
-            };
+                home = {
+                  username = user.username;
+                  homeDirectory = "/home/${user.username}";
+                  stateVersion = version;
+                };
+
+                imports = map (module: module + "/hm.nix") user.shared-modules;
+              }
+            ];
           }
         ) user-paths);
       };
