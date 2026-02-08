@@ -1,6 +1,5 @@
 # mk-system function for creating NixOS system configurations
 {
-  hardware-configuration,
   nixpkgs,
   nixpkgs-alt,
   home-manager,
@@ -42,9 +41,6 @@ nixpkgs.lib.nixosSystem
   inherit system specialArgs;
 
   modules = [
-    # Hardware configuration
-    hardware-configuration
-
     # System configuration
     {
       nix.settings.experimental-features = [ "nix-command" "flakes" ];
