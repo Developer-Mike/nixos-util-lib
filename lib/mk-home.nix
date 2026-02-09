@@ -25,7 +25,7 @@ in
             value = lib.mkMerge [
               user.home-manager-user
               {
-                _module.args.user-secrets = user.secrets;
+                _module.args.user-config = user.config;
 
                 home = {
                   username = user.username;

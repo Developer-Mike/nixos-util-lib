@@ -33,8 +33,8 @@ let
   # Import OS configuration
   os-configuration = import os-path tmpSpecialArgs;
 
-  # Make final shared args with secrets
-  specialArgs = tmpSpecialArgs // { system-secrets = os-configuration.secrets; };
+  # Make final shared args with config
+  specialArgs = tmpSpecialArgs // { system-config = os-configuration.config; };
 in
 nixpkgs.lib.nixosSystem
 {

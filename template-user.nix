@@ -2,7 +2,7 @@
 
 {
   username = "username";
-  secrets = import ../secrets/user.nix args;
+  config = import ../config/user.nix args;
 
   system-user = {
     shell = pkgs.zsh;

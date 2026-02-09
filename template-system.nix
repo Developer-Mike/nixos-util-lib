@@ -1,7 +1,7 @@
 { ... } @ args:
 
 {
-  secrets = import ../secrets/os.nix args;
+  config = import ../config/os.nix args;
 
   system = [
 
