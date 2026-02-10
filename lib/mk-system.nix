@@ -11,6 +11,7 @@
   systemname,
   user-paths,
   os-path,
+  secrets ? null,
 
   ...
 } @ args:
@@ -60,5 +61,6 @@ nixpkgs.lib.nixosSystem
     (import ./mk-home.nix { inherit home-manager version user-paths specialArgs; })
   ] ++ nixpkgs.lib.mkIf (inputs.agenix != null) [
     inputs.agenix.nixosModules.default
+    secrets
   ] ++ os-configuration.system;
 }
