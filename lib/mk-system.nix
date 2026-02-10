@@ -1,7 +1,8 @@
 # mk-system function for creating NixOS system configurations
 {
-  custom-options ? [],
-  secrets ? null
+  secrets-module ? null,
+  user-options ? null,
+  system-options ? null,
 }:
 
 {
@@ -52,10 +53,19 @@ nixpkgs.lib.nixosSystem
       nixpkgs.config.allowUnfree = true;
     }
 
+    # Secrets
+    (if inputs.agenix != null then
+      inputs.agenix.nixosModules.default
+    else { })
+
+    (if secrets-module != null then
+      secrets-module
+    else { })
+
     # Custom options
-    ({ ... }: {
-      imports = custom-options;
-    })
+    (if system-options != null then
+      system-options
+    else { })
 
     # System module
     system-module
@@ -66,9 +76,6 @@ nixpkgs.lib.nixosSystem
     })
 
     # Home Manager
-    (import ./mk-home.nix { inherit home-manager version users specialArgs; })
-  ] ++ (if inputs.agenix != null then [
-    inputs.agenix.nixosModules.default
-    secrets
-  ] else []);
+    (import ./mk-home.nix { inherit home-manager version user-options users specialArgs; })
+  ];
 }

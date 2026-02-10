@@ -1,5 +1,5 @@
 # mk-home function for creating Home Manager configurations
-{ home-manager, version, users, specialArgs }:
+{ home-manager, version, user-options, users, specialArgs }:
 
 { lib, pkgs, ... }:
 let
@@ -20,7 +20,7 @@ in
         users = builtins.listToAttrs (map (user: {
             name = user.username;
             value = {
-              import = [ user.home-manager-module ];
+              import = [ user-options user.home-manager-module ];
 
               home = {
                 username = user.username;
