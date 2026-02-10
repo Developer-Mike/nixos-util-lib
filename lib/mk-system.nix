@@ -59,8 +59,8 @@ nixpkgs.lib.nixosSystem
 
     # Home Manager
     (import ./mk-home.nix { inherit home-manager version user-paths specialArgs; })
-  ] ++ nixpkgs.lib.mkIf (inputs.agenix != null) [
+  ] ++ (if inputs.agenix != null then [
     inputs.agenix.nixosModules.default
     secrets
-  ] ++ os-configuration.system;
+  ] else []) ++ os-configuration.system;
 }
