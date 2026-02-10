@@ -23,7 +23,7 @@ in
           in {
             name = user.username;
             value = {
-              import = [ user-options user.home-manager-module ];
+              imports = [ user-options user.home-manager-module ];
 
               home = {
                 username = user.username;
