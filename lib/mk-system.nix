@@ -3,6 +3,7 @@
   nixpkgs,
   nixpkgs-alt,
   home-manager,
+  inputs,
 
   system,
   version,
@@ -57,5 +58,7 @@ nixpkgs.lib.nixosSystem
 
     # Home Manager
     (import ./mk-home.nix { inherit home-manager version user-paths specialArgs; })
+  ] ++ nixpkgs.lib.mkIf (inputs.agenix != null) [
+    inputs.agenix.nixosModules.default
   ] ++ os-configuration.system;
 }
