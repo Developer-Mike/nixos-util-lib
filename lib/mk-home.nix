@@ -17,7 +17,10 @@ in
         useUserPackages = true;
         backupFileExtension = "bak";
 
-        users = builtins.listToAttrs (map (user: {
+        users = builtins.listToAttrs (map (user-path:
+          let
+            user = import user-path;
+          in {
             name = user.username;
             value = {
               import = [ user-options user.home-manager-module ];

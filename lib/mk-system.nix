@@ -72,7 +72,7 @@ nixpkgs.lib.nixosSystem
 
     # User system modules
     ({ ... }: {
-      imports = nixpkgs.lib.map (user: user.system-module) users;
+      imports = nixpkgs.lib.map (user: (import user).system-module) users;
     })
 
     # Home Manager
