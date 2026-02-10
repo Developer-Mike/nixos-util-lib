@@ -2,16 +2,16 @@
 { home-manager, version, user-options, users, specialArgs }:
 
 { lib, pkgs, ... }:
-let
-  extraSpecialArgs = specialArgs // {
-    inherit pkgs;
-  };
-in
+
 {
   imports = [
-    home-manager.nixosModules.home-manager {
+    home-manager.nixosModules.home-manager
+
+    {
       home-manager = {
-        inherit extraSpecialArgs;
+        extraSpecialArgs = specialArgs // {
+          inherit pkgs;
+        };
 
         useGlobalPkgs = true;
         useUserPackages = true;
