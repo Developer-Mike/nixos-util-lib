@@ -36,7 +36,7 @@ let
   os-configuration = import os-path tmpSpecialArgs;
 
   # Make final shared args with config
-  specialArgs = tmpSpecialArgs // { system-config = os-configuration.config; };
+  specialArgs = tmpSpecialArgs // { system-config = os-configuration.system-config; };
 in
 nixpkgs.lib.nixosSystem
 {
