@@ -1,5 +1,5 @@
 # mk-home function for creating Home Manager configurations
-{ home-manager, version, user-paths, specialArgs }:
+{ home-manager, version, users, specialArgs }:
 
 { lib, pkgs, ... }:
 let
@@ -17,27 +17,19 @@ in
         useUserPackages = true;
         backupFileExtension = "bak";
 
-        # Loop through users and create ${user.username}: ${user.home-manager-user} mapping
-        users = builtins.listToAttrs (map (user-path:
-          let user = import user-path extraSpecialArgs;
-          in {
+        users = builtins.listToAttrs (map (user: {
             name = user.username;
-            value = lib.mkMerge [
-              user.home-manager-user
-              {
-                _module.args.user-config = user.user-config;
+            value = {
+              import = [ user.home-manager-module ];
 
-                home = {
-                  username = user.username;
-                  homeDirectory = "/home/${user.username}";
-                  stateVersion = version;
-                };
-
-                imports = map (module: module + "/hm.nix") user.shared-modules;
-              }
-            ];
+              home = {
+                username = user.username;
+                homeDirectory = "/home/${user.username}";
+                stateVersion = version;
+              };
+            };
           }
-        ) user-paths);
+        ) users);
       };
     }
   ];

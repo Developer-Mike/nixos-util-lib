@@ -1,5 +1,10 @@
 # mk-system function for creating NixOS system configurations
 {
+  custom-options ? [],
+  secrets ? null
+}:
+
+{
   nixpkgs,
   nixpkgs-alt,
   home-manager,
@@ -9,9 +14,8 @@
   version,
   hostname-owner ? null,
   systemname,
-  user-paths,
-  os-path,
-  secrets ? null,
+  users,
+  system-module,
 
   ...
 } @ args:
@@ -28,15 +32,9 @@ let
   };
 
   # Shared arguments passed to all modules
-  tmpSpecialArgs = args // {
+  specialArgs = args // {
     inherit hostname pkgs-alt;
   };
-
-  # Import OS configuration
-  os-configuration = import os-path tmpSpecialArgs;
-
-  # Make final shared args with config
-  specialArgs = tmpSpecialArgs // { system-config = os-configuration.system-config; };
 in
 nixpkgs.lib.nixosSystem
 {
@@ -54,13 +52,23 @@ nixpkgs.lib.nixosSystem
       nixpkgs.config.allowUnfree = true;
     }
 
-    # Users
-    (import ./mk-users.nix { inherit specialArgs; })
+    # Custom options
+    ({ ... }: {
+      imports = custom-options;
+    })
+
+    # System module
+    system-module
+
+    # User system modules
+    ({ ... }: {
+      imports = users.map (user: user.system-module);
+    })
 
     # Home Manager
-    (import ./mk-home.nix { inherit home-manager version user-paths specialArgs; })
+    (import ./mk-home.nix { inherit home-manager version users specialArgs; })
   ] ++ (if inputs.agenix != null then [
     inputs.agenix.nixosModules.default
     secrets
-  ] else []) ++ os-configuration.system;
+  ] else []);
 }
